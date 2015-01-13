@@ -1,0 +1,6 @@
+name: ebml
+version: 0.1.0-dev
+author: Dennis Kaselow
+description: Creates a valid EBML header as required by a WebM file.
+dependencies:
+  unittest: any
