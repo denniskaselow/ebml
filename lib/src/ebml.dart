@@ -1,6 +1,6 @@
 part of ebml;
 
-/// The Ebml container. Implementation follows RFC at
+/// The EBML container. Implementation follows RFC at
 /// [http://matroska.org/technical/specs/rfc/index.html].
 class Ebml {
   Uint8List id = new Uint8List.fromList([0x1a, 0x45, 0xdf, 0xa3]);
@@ -94,8 +94,15 @@ List<int> _encodeLength(Iterable<int> bytes) {
   }
   var codedLengthOfLength = 0x80 >> (lengthOfLength - 1);
   var codedLength = <int>[];
-  if (codedLengthOfLength == 0x80) {
+  if (codedLengthOfLength > length + 1) {
     codedLength.add(codedLengthOfLength + length);
+  } else {
+    codedLength.add(codedLengthOfLength);
+    var index = codedLength.length;
+    while (length != 0) {
+      codedLength.insert(index, length & 0xff);
+      length >>= 8;
+    }
   }
   return codedLength;
 }
